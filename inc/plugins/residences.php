@@ -312,7 +312,7 @@ function residences_install()
 
     //CSS einfügen
     $css = array(
-        'name' => 'residence.css',
+        'name' => 'residences.css',
         'tid' => 1,
         'attachedto' => '',
         "stylesheet" =>    '.home_title{
@@ -329,7 +329,7 @@ font-weight: 200;
 width: 100%;
 	padding: 2px;
 	box-sizing: border-box;
-font-family: \'open sans\';
+ font-family: Tahoma, Verdana, Arial, Sans-Serif;
 font-size: 12px;
 color: #333;
 text-align: justify;
@@ -353,7 +353,7 @@ color: #333;
 text-align: center;
 }
         ',
-        'cachefile' => $db->escape_string(str_replace('/', '', 'residence.css')),
+        'cachefile' => $db->escape_string(str_replace('/', '', 'residences.css')),
         'lastmodified' => time()
     );
 
