@@ -316,10 +316,10 @@ function residences_install()
         'tid' => 1,
         'attachedto' => '',
         "stylesheet" =>    '.home_title{
-font-family: \'Titillium Web\', sans-serif;
+font-family: Tahoma, Verdana, Arial, Sans-Serif;
 font-size: 15px;
 text-transform: uppercase;
-color: #412814;
+color: #333;
 text-align: center;
 font-weight: 200;
 	letter-spacing: 3px;
@@ -331,13 +331,13 @@ width: 100%;
 	box-sizing: border-box;
 font-family: \'open sans\';
 font-size: 12px;
-color: #1b1b1b;
+color: #333;
 text-align: justify;
 }
 
 .home_desc a{
-    font-family: \'Titillium Web\', sans-serif;
-    color: #412814;
+    font-family: Tahoma, Verdana, Arial, Sans-Serif;
+    color: #333;
     font-size: 12px;
     text-decoration: none;
     text-transform: uppercase;
@@ -346,9 +346,9 @@ text-align: justify;
 }
 
 .home_info{
-	font-family: \'open sans\';
+  font-family: Tahoma, Verdana, Arial, Sans-Serif;
 font-size: 12px;
-color: #1b1b1b;
+color: #333;
 	text-transform: uppercase;
 text-align: center;
 }
