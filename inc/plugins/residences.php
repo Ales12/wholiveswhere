@@ -243,35 +243,52 @@ function residences_install()
 <head>
 <title>{$mybb->settings[\'bbname\']} - {$lang->wlw_modcp}</title>
 {$headerinclude}
+
 </head>
 <body>
 	{$header}
-	<table width="100%" border="0" align="center">
-		<tr>
-			{$modcp_nav}
-			<td valign="top">
-				<table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-			<tr><td class="thead"><h1>{$lang->wlw_modcp}</h1></td> </tr>
-				<tr><td>
+		<table width="100%" border="0" align="center">
+			<tr>
+				{$modcp_nav}
+				<td valign="top">
+					<table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
+<tr><td class="thead"><h1>{$lang->wlw_modcp}</h1></td> </tr>
+						<tr>
+							<td width="100%" class="trow1" valign="top">
 					<table width="80%" style="margin: auto;">
-					<tr><td class="trow1" align="center" colspan="3">
-						<h2>{$lang->wlw_places}</h2>	</td></tr>
+					<tr><td class="thead" align="center" colspan="3">
+						<h2>{$lang->wlw_places}</h2>		</td></tr>	<tr><td class="trow1" colspan="3" align="center">{$accept_all_place}</td></tr>
 					<tr><td><h3>{$lang->wlw_country}</h3></td><td><h3>{$lang->wlw_place}</h3></td><td><h3>{$lang->wlw_modcp_options}</h3></td></tr>
 					{$residences_modcp_country}
 						
-						<tr><td class="trow1" colspan="3" align="center">{$accept_all_places}</td></tr>
+					
 						</table>
 					<br />
 					<br />
 						<table width="80%" style="margin: auto;">
-					<tr><td class="trow1" align="center" colspan="2">
-						<h2>{$lang->wlw_homes}</h2>	</td></tr>
-
+					<tr><td class="thead" align="center" colspan="2">
+					<h2>{$lang->wlw_homes}</h2>		</td></tr>
+<tr><td class="trow1" colspan="2" align="center">{$accept_all_home}</td></tr>
 					{$residences_modcp_home}
-											<tr><td class="trow1" colspan="2" align="center">{$accept_all_home}</td></tr>
+											
 						</table>
-						</td></tr>
-			</table>
+										<br />
+					<br />
+						<table width="80%" style="margin: auto;">
+					<tr><td class="thead" align="center" colspan="3">
+						<h2>{$lang->wlw_edit_place}</h2>	</td></tr>
+					<tr><td><h3>{$lang->wlw_country}</h3></td><td><h3>{$lang->wlw_place}</h3></td><td><h3>{$lang->wlw_modcp_options}</h3></td></tr>
+					{$residences_modcp_places}
+						</table>
+</td>
+</tr>
+							
+					</table>
+
+				</td>
+			</tr>
+		</table>
+	</form>
 	{$footer}
 </body>
 </html>'),
