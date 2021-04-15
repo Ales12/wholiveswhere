@@ -145,7 +145,9 @@ function residences_install()
 <td class="tcat"><h2>{$lang->wlw_add}</h2></td></tr>
 <tr>
 <td class="trow1" align="center">
-<input type="text" name="country" id="country" value="" class="textbox" />
+    <select name="country" id="country">
+{$country_select}
+    </select>
 </td>
 <td class="trow2" align="center">
 <input type="text" name="place" id="place" value="" class="textbox" />
