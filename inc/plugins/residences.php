@@ -217,41 +217,7 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
-    $insert_array = array(
-        'title'        => 'residences_edit_place',
-        'template'    => $db->escape_string('<style>.infopop { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: hsla(0, 0%, 0%, 0.5); z-index: 1; opacity:0; -webkit-transition: .5s ease-in-out; -moz-transition: .5s ease-in-out; transition: .5s ease-in-out; pointer-events: none; } 
-
-.infopop:target { opacity:1; pointer-events: auto; } 
-
-.infopop > .pop {width: 500px; position: relative; margin: 10% auto; padding: 25px; z-index: 3; } 
-
-.closepop { position: absolute; right: -5px; top:-5px; width: 100%; height: 100%; z-index: 2; }</style>
-<div id="popinfo$place_id" class="infopop">
-  <div class="pop"><form action="modcp.php?action=residences" id="places" method="post">
-	  <input type="text" name="place_id" id="place_id" value="{$place_id}" class="textbox" />
-<table width="80%">
-<tr><td class="thead" colspan="4"><h1>Ort bearbeiten</h1></td></tr>
-<tr><td class="tcat"><h2>Land</h2></td><td class="tcat"><h2>Ort</h2></td><td class="tcat"><h2>Bearbeiten</h2></td></tr>
-<tr>
-<td class="trow1" align="center">
-	<select name="country" id="country">
-{$country_select}
-	</select>
-</td>
-<td class="trow2" align="center">
-<input type="text" name="place" id="place" value="{$place}" class="textbox" />
-</td>
-<td colspan="2" class="trow1" align="center"><input type="submit" name="editplace" value="Ort bearbeiten" id="submit" class="button"></td></tr>
-</table>
-</form><br />
-</div><a href="#closepop" class="closepop"></a>
-</div>
-<a href="#popinfo$place_id"><i class="fas fa-edit" title="Wohnort editieren"></i></a>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
-    );
-    $db->insert_query("templates", $insert_array);
+  
 
     $insert_array = array(
         'title'        => 'residences_edit_place',
@@ -498,7 +464,7 @@ function residences_activate()
 	<tbody style="{$collapsed[\'modcpusers_e\']}" id="modcpusers_e">
 {$residence_modcp}
 	</tbody>');
-
+    find_replace_templatesets("header", "#" . preg_quote('{$awaitingusers}') . "#i", '{$awaitingusers} {$residence_alert_place} {$residence_alert_home}');
 }
 
 function residences_deactivate()
@@ -513,6 +479,7 @@ function residences_deactivate()
 	<tbody style="{$collapsed[\'modcpusers_e\']}" id="modcpusers_e">
 {$residence_modcp}
 	</tbody>') . "#i", '', 0);
+	   find_replace_templatesets("header", "#" . preg_quote('{$residence_alert_place} {$residence_alert_home}') . "#i", '', 0);
 }
 
 // Usergruppen-Berechtigungen
