@@ -319,6 +319,26 @@ function residences_install()
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
+        'title'        => 'residences_modcp_home_refuse',
+        'template'    => $db->escape_string('<form action="misc.php?action=residences" id="home_refuse" method="post">
+<table width="150px">
+<tr>
+<td class="trow2" align="center">
+<input type="hidden" name="res_id" id="res_id" value="{$row[\'res_id\']}" class="textbox" />
+<textarea class="textarea" name="refuse_reason" id="refuse_reason" rows="2" cols="15" style="width: 100%">Ablehnungsgrund angeben.</textarea>
+	</td></tr>
+	<tr>
+<td class="trow1" align="center">	
+	<input type="submit" name="refuse_home" value="Wohnort ablehnen" id="submit" class="button"></td></tr>
+</table>
+</form>'),
+        'sid'        => '-1',
+        'version'    => '',
+        'dateline'    => TIME_NOW
+    );
+    $db->insert_query("templates", $insert_array);
+
+    $insert_array = array(
         'title'        => 'residences_modcp_places',
         'template'    => $db->escape_string('<tr><td class="trow1" align="center">{$country}</td><td class="trow2" align="center">{$place}</td><td class="trow1" align="center"><div style="font-size: 20px;">{$edit_place}<div class="modal" id="edit_{$place_id}" style="display: none;">{$edit_place_res}</div> {$delete} </div></td></tr>'),
         'sid'        => '-1',
