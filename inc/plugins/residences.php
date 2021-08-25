@@ -13,7 +13,7 @@ $plugins->add_hook("admin_user_groups_edit_commit", "residences_usergroup_permis
 function residences_info()
 {
     return array(
-        "name"			=> "Residenzen Verwaltung",
+        "name"			=> "Wer wohnt Wo? - Verwaltung",
         "description"	=> "Hier kannst du die Residenz der Charakter verwalten. Hierbei können User selbstständig Wohnungen einreichen und sich in diese dann eintragen. ",
         "website"		=> "",
         "author"		=> "Ales",
@@ -145,7 +145,9 @@ function residences_install()
 <td class="tcat"><h2>{$lang->wlw_add}</h2></td></tr>
 <tr>
 <td class="trow1" align="center">
-<input type="text" name="country" id="country" value="" class="textbox" />
+<select name="country" id="country">
+{$country_select}
+	</select>
 </td>
 <td class="trow2" align="center">
 <input type="text" name="place" id="place" value="" class="textbox" />
@@ -183,13 +185,18 @@ function residences_install()
 <textarea name="description" id="description" style="width: 200px; height: 50px;"></textarea>
 	</td>
 	<td class="trow2" align="center">
-<input type="number" name="personcount" id="personcount" value="0" class="textbox" />
+<input type="number" name="personcount" id="personcount" value="1" class="textbox" />
 </td>
 	<td class="trow1" align="center">
 		<select name="kind">
-			<option value="houes">Haus</option>
-			<option value="flat">Wohnung</option>
-			<option value="flat_share">WG</option>
+			<option value="Apartment">Apartment</option>
+			<option value="Haus">Haus</option>
+			<option value="Heimtlos">Heimtlos</option>
+			<option value="Farm">Farm</option>
+			<option value="Loft">Loft</option>
+			<option value="Villa">Villa</option>
+			<option value="Wohngemeinschaft">WG</option>
+			<option value="Wohnung">Wohnung</option>
 		</select>
 		</td>
 	</tr>
@@ -211,6 +218,7 @@ function residences_install()
 	<td class="trow2" width="30%" valign="top"><div class="home_info">{$personcount}
 		{$residences_resident}
 {$move_in}
+{$home_options}
 		</td></tr>'),
         'sid'        => '-1',
         'version'    => '',
@@ -220,7 +228,7 @@ function residences_install()
 
     $insert_array = array(
         'title'        => 'residences_place',
-        'template'    => $db->escape_string('<tr><td class="tcat" colspan="2"><h2>{$placename}</h2></td></tr>
+        'template'    => $db->escape_string('<tr><td class="tcat" colspan="2"><strong>{$placename}</strong></td></tr>
 {$residences_home}'),
         'sid'        => '-1',
         'version'    => '',
@@ -252,13 +260,13 @@ function residences_install()
 				{$modcp_nav}
 				<td valign="top">
 					<table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-<tr><td class="thead"><h1>{$lang->wlw_modcp}</h1></td> </tr>
+<tr><td class="thead"><div class="headline">{$lang->wlw_modcp}</div></td> </tr>
 						<tr>
 							<td width="100%" class="trow1" valign="top">
 					<table width="80%" style="margin: auto;">
 					<tr><td class="thead" align="center" colspan="3">
-						<h2>{$lang->wlw_places}</h2>		</td></tr>	<tr><td class="trow1" colspan="3" align="center">{$accept_all_place}</td></tr>
-					<tr><td><h3>{$lang->wlw_country}</h3></td><td><h3>{$lang->wlw_place}</h3></td><td><h3>{$lang->wlw_modcp_options}</h3></td></tr>
+						<div class="modcp_name">{$lang->wlw_places}</div>		</td></tr>	<tr><td class="trow1" colspan="3" align="center">{$accept_all_place}</td></tr>
+					<tr><td><div class="modcp_cat">{$lang->wlw_country}</div></td><td><div class="modcp_cat">{$lang->wlw_place}</div></td><td><div class="modcp_cat">{$lang->wlw_modcp_options}</div></td></tr>
 					{$residences_modcp_country}
 						
 					
@@ -267,7 +275,7 @@ function residences_install()
 					<br />
 						<table width="80%" style="margin: auto;">
 					<tr><td class="thead" align="center" colspan="2">
-					<h2>{$lang->wlw_homes}</h2>		</td></tr>
+					<div class="modcp_name">{$lang->wlw_homes}</div>		</td></tr>
 <tr><td class="trow1" colspan="2" align="center">{$accept_all_home}</td></tr>
 					{$residences_modcp_home}
 											
@@ -276,8 +284,8 @@ function residences_install()
 					<br />
 						<table width="80%" style="margin: auto;">
 					<tr><td class="thead" align="center" colspan="3">
-						<h2>{$lang->wlw_edit_place}</h2>	</td></tr>
-					<tr><td><h3>{$lang->wlw_country}</h3></td><td><h3>{$lang->wlw_place}</h3></td><td><h3>{$lang->wlw_modcp_options}</h3></td></tr>
+						<div class="modcp_name">{$lang->wlw_edit_place}</div>	</td></tr>
+					<tr><td><div class="modcp_cat">{$lang->wlw_country}</div></td><td><div class="modcp_cat">{$lang->wlw_place}</div></td><td><div class="modcp_cat">{$lang->wlw_modcp_options}</div></td></tr>
 					{$residences_modcp_places}
 						</table>
 </td>
@@ -309,14 +317,20 @@ function residences_install()
 
     $insert_array = array(
         'title'        => 'residences_modcp_home',
-        'template'    => $db->escape_string('<tr><td  class="tcat" colspan="2"><h2>({$kind}) {$residence} in {$place}</td></tr>
-<tr><td class="trow1">{$personcount}
-	{$description}</td><td class="trow2">{$accept_home} {$refuse_home}</td></tr>'),
+        'template'    => $db->escape_string('<tr><td  class="tcat" colspan="2"><div class="modcp_name">({$kind}) {$residence}</td></tr>
+<tr><td  class="trow2" colspan="2"> in {$place} ({$country})</td>
+<tr><td class="trow1" valign="top"><div style="text-align: center;">{$personcount} | eingereicht von {$user}</div>
+	<div>{$area} {$description}</div></td>
+	<td class="trow2" style="text-align: center;">
+		{$accept_home}
+		{$refuse_home}
+	</td></tr>'),
         'sid'        => '-1',
         'version'    => '',
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
+
 
     $insert_array = array(
         'title'        => 'residences_modcp_home_refuse',
@@ -337,6 +351,7 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
+
 
     $insert_array = array(
         'title'        => 'residences_modcp_places',
@@ -406,15 +421,7 @@ function residences_install()
 
     $insert_array = array(
         'title'        => 'residences_edit_place',
-        'template'    => $db->escape_string('<style>.infopop { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: hsla(0, 0%, 0%, 0.5); z-index: 1; opacity:0; -webkit-transition: .5s ease-in-out; -moz-transition: .5s ease-in-out; transition: .5s ease-in-out; pointer-events: none; } 
-
-.infopop:target { opacity:1; pointer-events: auto; } 
-
-.infopop > .pop {width: 500px; position: relative; margin: 10% auto; padding: 25px; z-index: 3; } 
-
-.closepop { position: absolute; right: -5px; top:-5px; width: 100%; height: 100%; z-index: 2; }</style>
-<div id="popinfo$place_id" class="infopop">
-  <div class="pop"><form action="modcp.php?action=residences" id="places" method="post">
+        'template'    => $db->escape_string('<form action="modcp.php?action=residences" id="places" method="post">
 	  <input type="hidden" name="place_id" id="place_id" value="{$place_id}" class="textbox" />
 <table width="80%">
 <tr><td class="thead" colspan="4"><h1>{$lang->wlw_edit_place}</h1></h1></td></tr>
@@ -430,10 +437,7 @@ function residences_install()
 </td>
 <td colspan="2" class="trow1" align="center"><input type="submit" name="editplace" value="Ort bearbeiten" id="submit" class="button"></td></tr>
 </table>
-</form><br />
-</div><a href="#closepop" class="closepop"></a>
-</div>
-<a href="#popinfo$place_id"><i class="fas fa-edit" title="Wohnort editieren"></i></a>'),
+</form>'),
         'sid'        => '-1',
         'version'    => '',
         'dateline'    => TIME_NOW
@@ -606,7 +610,7 @@ $plugins->add_hook('misc_start', 'residences_misc');
 
 
 function residences_misc(){
-    global $mybb, $templates, $lang, $header, $headerinclude, $footer, $page, $db, $places_select, $edit_resi, $edit, $place_check, $country_select, $place_delete, $lang, $home_options;
+    global $mybb, $templates, $lang, $header, $headerinclude, $residence_alert, $footer, $page, $db, $places_select, $edit_resi, $edit, $place_check, $country_select, $place_delete, $lang, $home_options;
     //Die Sprachdatei
     $lang->load('residences');
     require_once MYBB_ROOT."inc/class_parser.php";;
@@ -625,6 +629,18 @@ function residences_misc(){
         );
         // Add a breadcrumb
         add_breadcrumb('Wer wohnt wo?', "misc.php?action=residences");
+        $uid = $mybb->user['uid'];
+
+        $alertquery = $db->fetch_array($db->query("select *
+        from ".TABLE_PREFIX."residence
+        WHERE accepted = 0
+        "));
+
+        if($alertquery['uid'] == $uid){
+            $residence_alert ="<div class=\"red_alert\">Dein Wohnort muss nun vom Team freigeschaltet werden.</div>";
+        } else{
+            $residence_alert = "";
+        }
 
         $country_array = $mybb->settings['reseidences_countrys'];
 
@@ -687,7 +703,6 @@ function residences_misc(){
                     $residence = $homes['residence'];
                     $description = $parser->parse_message($homes['description'], $options);
                     $kind = $homes['kind'];
-
 
 
 
@@ -784,7 +799,7 @@ function residences_misc(){
 
                         eval("\$edit_resi = \"" . $templates->get ("residences_edit") . "\";");
                         $place_delete = "| <a href='misc.php?action=residences&place_delete=$res_id' title='Wohnort löschen'>Wohnort Löschen</a>";
-                        $home_options = "<div style=\"font-size: 9px; text-align: center;\">
+                        $home_options = "<div class=\"home_control\">
                                            {$edit}<div class=\"modal\" id=\"edit_{$res_id}\" style=\"display: none;\">{$edit_resi}</div>
                                             {$place_delete}</div>";
                     }
@@ -854,6 +869,7 @@ function residences_misc(){
 
             $new_record = array(
                 "place_id" => $db->escape_string($place_id),
+
                 "residence" => $db->escape_string($residence),
                 "description" => $db->escape_string($description),
                 "kind" => $db->escape_string($kind),
@@ -1251,12 +1267,12 @@ function residences_modcp() {
             $kind = $owner_uid['kind'];
 
 
-
             $pm_change = array(
                 "subject" => "Wohnort wurde abgelehnt",
                 "message" => "Leider wurde dein Wohnort abgelehnt. Bitte setze dich entweder mit dem Team in verbindung, solltest du Fragen haben oder erstelle es verändert erneut. <a href='misc.php?action=residences'>Zur Wer wohnt wo? Übersicht.</a><br />
                     Das sind die Informationen, die du angegeben hast:<br />
-                   <b>Wohnort</b> {$residence} ({$kind})<br />",
+                   <b>Wohnort</b> {$residence} ({$kind})<br />
+            <b>Beschreibung</b>  {$description}<br />",
                 //to: wer muss die anfrage bestätigen
                 "fromid" => $accept_uid,
                 //from: wer hat die anfrage gestellt
