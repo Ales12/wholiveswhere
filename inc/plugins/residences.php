@@ -733,20 +733,8 @@ function residences_misc(){
 
                         if($mybb->user['uid'] == $resident['uid']){
 
-                            $select_place = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."places
-            ORDER BY place ASC
-            ");
 
-                            while($places = $db->fetch_array($select_place)){
-                                $place_check = "";
-                                $place_id_check = $places['place_id'];
-                                if($place_id ==  $place_id_check){
-                                    $place_check = "selected=\"selected\"";
-
-                                }
-                                $places_select .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']}";
-                            }
+                            
 
                             $edit = "<a onclick=\"$('#edit_{$res_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\"><i class=\"fa fa-edit\" aria-hidden=\"true\"></i></a> <br />";
 
@@ -764,36 +752,6 @@ function residences_misc(){
                     }
 
                     if($mybb->usergroup['canmodcp'] == 1){
-
-                        if($kind == 'houses'){
-                            $house_check= "selected=\"selected\"";
-                            $flat_check = "";
-                            $flat_share_check = "";
-                        }elseif($kind == 'flat'){
-                            $house_check= "";
-                            $flat_check = "selected=\"selected\"";
-                            $flat_share_check = "";
-                        }elseif($kind == 'flat_share'){
-                            $house_check= "";
-                            $flat_check = "";
-                            $flat_share_check = "selected=\"selected\"";
-                        }
-
-                        $select_place = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."places
-            ORDER BY place ASC
-            ");
-
-                        while($places = $db->fetch_array($select_place)){
-                            $place_check = "";
-                            $place_id_check = $places['place_id'];
-                            if($place_id ==  $place_id_check){
-                                $place_check = "selected=\"selected\"";
-
-                            }
-                            $places_select .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']}";
-                        }
-
 
                         $edit = "<a onclick=\"$('#edit_{$res_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\">Wohnort Editieren</a> ";
 
