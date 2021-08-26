@@ -376,7 +376,7 @@ function residences_install()
 			<option value="%">Stadt wählen</option>
 			{$places_select}
 		</select>
-		<input type="text" name="area" id="area" placeholder="Stadtbereich im Municipio" value="{$homes[\'area\']}" class="textbox" style="width: 70%;" />
+		
 		</td>
 <td class="trow2" align="center">
 <input type="text" name="residence" id="residence" value="{$homes[\'residence\']}" class="textbox" style="width: 70%;" />
