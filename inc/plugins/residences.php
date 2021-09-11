@@ -1023,20 +1023,7 @@ function residences_modcp() {
         $accept_all_place = "<a href='modcp.php?action=residences&accept_all_places=all'>Alle Orte Akzeptieren</a>";
         $accept_all_home = "<a href='modcp.php?action=residences&accept_all_home=all'>Alle Wohnorte Akzeptieren</a>";
 
-
-//Gebe alle Orte aus, um sie löschen oder bearbeiten zu können
-        $select = $db->query("SELECT *
-        FROM ".TABLE_PREFIX."places
-        order by country ASC, place ASC
-        ");
-
-        while($row = $db->fetch_array($select)){
-            $place_id = $row['place_id'];
-
-            $country = $row['country'];
-            $place = $row['place'];
-
-            $country_array = $mybb->settings['reseidences_countrys'];
+  $country_array = $mybb->settings['reseidences_countrys'];
 
             $countrys = explode(", ", $country_array);
 
@@ -1050,6 +1037,19 @@ function residences_modcp() {
                 $country_select .= "<option value='{$country_all}' {$select_country}>{$country_all}</option>";
             }
 
+//Gebe alle Orte aus, um sie löschen oder bearbeiten zu können
+        $select = $db->query("SELECT *
+        FROM ".TABLE_PREFIX."places
+        order by country ASC, place ASC
+        ");
+
+        while($row = $db->fetch_array($select)){
+            $place_id = $row['place_id'];
+
+            $country = $row['country'];
+            $place = $row['place'];
+
+          
             $delete = "<a href='modcp.php?action=residences&delete_place=$place_id' title='Ort löschen'><i class=\"fas fa-trash-alt\"></i></a>";
             $edit_place = "<a onclick=\"$('#edit_{$place_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\"><i class=\"fas fa-edit\" title=\"Wohnort editieren\"></i></a>";
 
