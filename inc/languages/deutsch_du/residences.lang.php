@@ -14,3 +14,4 @@ $l['wl_modcp_option'] = "Optionen";
 $l['wlw_homes'] = "Wohnungen";
 $l['wlw_edit_place'] = "Orte bearbeiten";
 $l['wlw_edit'] = "Bearbeiten";
+$l['wlw_placename'] = "Bezeichnung der Residenz";
