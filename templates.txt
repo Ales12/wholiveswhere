@@ -128,7 +128,7 @@
 <table width="100%">
 <tr><td class="thead" colspan="5"><strong>{$lang->wlw_add_home}</strong></td></tr>
 <tr><td class="tcat"><strong>{$lang->wlw_homeplace}</strong></td>
-<td class="tcat"><strong>Bezeichnung</strong></td>
+<td class="tcat"><strong>{$lang->wlw_placename}</strong></td>
 <td class="tcat"><strong>{$lang->wlw_desc}</strong></td>
 <td class="tcat"><strong>{$lang->wlw_residents}</strong></td>
 <td class="tcat"><strong>{$lang->wlw_kind}</strong></td></tr>
