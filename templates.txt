@@ -171,7 +171,7 @@
 <div class="residences_home">
 	<div class="home_title">{$residence}</div>
 	<div class="home_kind">{$kind}</div>
-	<div class="home_desc">{$area}{$description}</div>
+	<div class="home_desc">{$description}</div>
 	<div class="home_info">{$personcount}
 		{$residences_resident}
 {$move_in}
