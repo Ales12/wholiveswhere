@@ -1,0 +1,258 @@
+// residences
+<html>
+<head>
+<title>{$mybb->settings['bbname']} - {$lang->wholiveswho}</title>
+{$headerinclude}
+</head>
+<body>
+{$header}
+	{$menu}
+<table border="0" cellspacing="{$theme['borderwidth']}" cellpadding="{$theme['tablespace']}" class="tborder">
+<tr>
+<td class="thead"><strong>{$lang->wholiveswho}</strong></td>
+</tr>
+<tr>
+<td class="trow1" align="center">
+	{$residence_alert}
+{$residences_formplace}
+	{$residences_formresidence}
+</td>
+</tr>
+	<tr>
+		<td>
+			{$residences_country}
+		</td>
+	</tr>
+</table>
+{$footer}
+</body>
+</html>
+
+// residences_country
+<table width="100%">
+	<tr><td class="tcat" colspan="2"><strong>{$country}</strong></td></tr>
+	{$residences_place}
+</table>
+
+// residences_edit
+<form action="misc.php?action=residences" id="residences" method="post">
+	  <input type="hidden" name="res_id" id="res_id" value="{$res_id}" class="textbox" />
+<table style="width: 80%;"  border="0" cellspacing="{$theme['borderwidth']}" cellpadding="{$theme['tablespace']}" class="tborder">
+<tr><td class="thead" colspan="2"><strong>Wohnung editieren</strong></td></tr>
+<tr><td class="tcat" width="50%"><strong>{$lang->wlw_country}</strong></td>
+<td class="tcat"  width="50%"><strong>{$lang->wlw_place}</strong></td>
+</tr>
+<tr><td class="trow1"align="center">
+		<select name="place_id">
+			<option value="%">Stadt wählen</option>
+			{$places_select}
+		</select>
+</td>
+<td class="trow2" align="center">
+<input type="text" name="residence" id="residence" value="{$homes['residence']}" class="textbox" style="width: 70%;" />
+	</td></tr>
+	<tr>
+		<tr><td class="tcat" colspan="2"><strong>{$lang->wlw_desc}</strong></td>
+	</tr><tr>
+<td class="trow1" align="center" colspan="2">
+<textarea name="description" id="description" style="width: 500px; height:100px;">{$homes['description']}</textarea>
+	</td></tr>
+	<tr><td class="tcat"><strong>{$lang->wlw_residents}</strong></td>
+		<td class="tcat"><strong>{$lang->wlw_kind}</strong></td></tr>
+	<tr>
+	<td class="trow2" align="center">
+<input type="number" name="personcount" id="personcount" value="{$homes['personcount']}" class="textbox" />
+</td>
+	<td class="trow1" align="center">
+		<select name="kind">
+			<option value="{$homes['kind']}">{$homes['kind']}</option>
+			<option value="Apartment">Apartment</option>
+			<option value="Haus">Haus</option>
+			<option value="Heimtlos">Heimtlos</option>
+				<option value="Farm">Farm</option>
+			<option value="Loft">Loft</option>
+			<option value="Villa">Villa</option>
+			<option value="Wohngemeinschaft">WG</option>
+			<option value="Wohnung">Wohnung</option>
+		</select>
+		</td>
+	</tr>
+	
+	<tr>
+<td colspan="5" class="trow1" align="center"><input type="submit" name="edithome" value="Wohnort editieren" id="submit" class="button"></td></tr>
+</table>
+</form>
+
+// residences_edit_place
+<form action="modcp.php?action=residences" id="places" method="post">
+	  <input type="hidden" name="place_id" id="place_id" value="{$place_id}" class="textbox" />
+<table width="80%">
+<tr><td class="thead" colspan="4"><strong>{$lang->wlw_edit_place}</strong></td></tr>
+<tr><td><strong>{$lang->wlw_country}</strong></td><td><strong>{$lang->wlw_place}</strong></td><td><strong>{$lang->wlw_edit}</strong></td></tr>
+<tr>
+<td class="trow1" align="center">
+	<select name="country" id="country">
+{$country_select}
+	</select>
+</td>
+<td class="trow2" align="center">
+<input type="text" name="place" id="place" value="{$place}" class="textbox" />
+</td>
+<td colspan="2" class="trow1" align="center"><input type="submit" name="editplace" value="Ort bearbeiten" id="submit" class="button"></td></tr>
+</table>
+</form>
+
+// residences_formplace
+<form action="misc.php?action=residences" id="places" method="post">
+<table width="100%">
+<tr><td class="thead" colspan="4"><strong>{$lang->wlw_add_new_world}</strong></td></tr>
+<tr><td class="tcat"><strong>{$lang->wlw_country}</strong></td>
+<td class="tcat"><strong>{$lang->wlw_place}</strong></td>
+<td class="tcat"><strong>{$lang->wlw_add}</strong></td></tr>
+<tr>
+<td class="trow1" align="center">
+	<select name="country" id="country">
+{$country_select}
+	</select>
+</td>
+<td class="trow2" align="center">
+<input type="text" name="place" id="place" value="" class="textbox" />
+</td>
+<td colspan="2" class="trow1" align="center">	
+	<input type="submit" name="addplace" value="Ort hinzufügen" id="submit" class="button"></td></tr>
+</table>
+</form><br />
+
+// residences_formresidence
+<form action="misc.php?action=residences" id="residences" method="post">
+<table width="100%">
+<tr><td class="thead" colspan="5"><strong>{$lang->wlw_add_home}</strong></td></tr>
+<tr><td class="tcat"><strong>{$lang->wlw_homeplace}</strong></td>
+<td class="tcat"><strong>Bezeichnung</strong></td>
+<td class="tcat"><strong>{$lang->wlw_desc}</strong></td>
+<td class="tcat"><strong>{$lang->wlw_residents}</strong></td>
+<td class="tcat"><strong>{$lang->wlw_kind}</strong></td></tr>
+<tr><td class="trow1"align="center">
+		<select name="place_id">
+			<option value="%">Ort wählen</option>
+			{$places_select}
+		</select>
+</td>
+<td class="trow2" align="center">
+<input type="text" name="residence" id="residence" value="" class="textbox" />
+</td>
+<td class="trow1" align="center">
+<textarea name="description" id="description" style="width: 200px; height: 50px;"></textarea>
+	</td>
+	<td class="trow2" align="center">
+<input type="number" name="personcount" id="personcount" value="0" class="textbox" />
+</td>
+	<td class="trow1" align="center">
+		<select name="kind">
+			<option value="#">{$lang->wlw_kind} wählen</option>
+			<option value="Apartment">Apartment</option>
+				<option value="Farm">Farm</option>
+			<option value="Haus">Haus</option>
+			<option value="Loft">Loft</option>
+				<option value="Penthouse">Penthouse</option>
+			<option value="Villa">Villa</option>
+			<option value="Wohngemeinschaft">WG</option>
+			<option value="Wohnung">Wohnung</option>
+		</select>
+		</td>
+	</tr>
+	
+	<tr>
+<td colspan="5" class="trow1" align="center"><input type="submit" name="addhome" value="Ort hinzufügen" id="submit" class="button"></td></tr>
+</table>
+</form><br />
+
+// residences_home
+<div class="residences_home">
+	<div class="home_title">{$residence}</div>
+	<div class="home_kind">{$kind}</div>
+	<div class="home_desc">{$area}{$description}</div>
+	<div class="home_info">{$personcount}
+		{$residences_resident}
+{$move_in}
+	</div>	
+{$home_options}
+</div>
+
+// residences_modcp
+<html>
+<head>
+<title>{$mybb->settings['bbname']} - {$lang->wlw_modcp}</title>
+{$headerinclude}
+
+</head>
+<body>
+	{$header}
+		<table width="100%" border="0" align="center">
+			<tr>
+				{$modcp_nav}
+				<td valign="top">
+					<table border="0" cellspacing="{$theme['borderwidth']}" cellpadding="{$theme['tablespace']}" class="tborder">
+<tr><td class="thead"><div class="headline">{$lang->wlw_modcp}</div></td> </tr>
+						<tr>
+							<td width="100%" class="trow1" valign="top">
+					<table width="80%" style="margin: auto;">
+					<tr><td class="thead" align="center" colspan="3">
+						<div class="modcp_name">{$lang->wlw_places}</div>		</td></tr>	<tr><td class="trow1" colspan="3" align="center">{$accept_all_place}</td></tr>
+					<tr><td><div class="modcp_cat">{$lang->wlw_country}</div></td><td><div class="modcp_cat">{$lang->wlw_place}</div></td><td><div class="modcp_cat">{$lang->wlw_modcp_options}</div></td></tr>
+					{$residences_modcp_country}
+						
+					
+						</table>
+					<br />
+					<br />
+						<table width="80%" style="margin: auto;">
+					<tr><td class="thead" align="center" colspan="2">
+					<div class="modcp_name">{$lang->wlw_homes}</div>		</td></tr>
+<tr><td class="trow1" colspan="2" align="center">{$accept_all_home}</td></tr>
+					{$residences_modcp_home}
+											
+						</table>
+										<br />
+					<br />
+						<table width="80%" style="margin: auto;">
+					<tr><td class="thead" align="center" colspan="3">
+						<div class="modcp_name">{$lang->wlw_edit_place}</div>	</td></tr>
+					<tr><td><div class="modcp_cat">{$lang->wlw_country}</div></td><td><div class="modcp_cat">{$lang->wlw_place}</div></td><td><div class="modcp_cat">{$lang->wlw_modcp_options}</div></td></tr>
+					{$residences_modcp_places}
+						</table>
+</td>
+</tr>
+							
+					</table>
+
+				</td>
+			</tr>
+		</table>
+	</form>
+	{$footer}
+</body>
+</html>
+
+// residences_modcp_country
+<tr><td class="trow1">{$country}</td><td class="trow2">{$place}</td><td class="trow1">{$accept} {$refuse}</td></tr>
+
+// residences_modcp_home_refuse
+<form action="modcp.php?action=residences" id="home_refuse" method="post">
+<table width="150px">
+<tr>
+<td class="trow2" align="center">
+<input type="hidden" name="res_id" id="res_id" value="{$row['res_id']}" class="textbox" />
+<textarea class="textarea" name="refuse_reason" id="refuse_reason" rows="2" cols="15" style="width: 100%">Ablehnungsgrund angeben.</textarea>
+	</td></tr>
+	<tr>
+<td class="trow1" align="center">	
+	<input type="submit" name="refuse_home" value="Wohnort ablehnen" id="submit" class="button"></td></tr>
+</table>
+</form>
+
+// residences_modcp_places
+<tr><td class="trow1" align="center">{$country}</td><td class="trow2" align="center">{$place}</td><td class="trow1" align="center"><div style="font-size: 20px;">{$edit_place}<div class="modal" id="edit_{$place_id}" style="display: none;">{$edit_place_res}</div> {$delete} </div></td></tr>
+
+// residences_resident
+<div>{$user} {$move_out}</div>
