@@ -138,6 +138,20 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
+    $insert_array = array(
+        'title'        => 'residences_place',
+        'template'    => $db->escape_string('<tr><td class="tcat"><div class="headline3">{$placename}</div></td></tr>
+<tr><td><div class="flex">
+{$residences_home}
+	</div>
+	</td></tr>
+'),
+        'sid'        => '-1',
+        'version'    => '',
+        'dateline'    => TIME_NOW
+    );
+    $db->insert_query("templates", $insert_array);
+
 
     $insert_array = array(
         'title'        => 'residences_edit',
@@ -384,7 +398,21 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
-
+    $insert_array = array(
+        'title'        => 'residences_modcp_home',
+        'template'    => $db->escape_string('<tr><td  class="tcat" colspan="2"><div class="modcp_name">({$kind}) {$residence}</td></tr>
+<tr><td  class="trow2" colspan="2"> in {$place} ({$country})</td>
+<tr><td class="trow1" valign="top"><div style="text-align: center;">{$personcount} | eingereicht von {$user}</div>
+	<div>{$area} {$description}</div></td>
+	<td class="trow2" style="text-align: center;">
+		{$accept_home}
+		{$refuse_home}
+	</td></tr>'),
+        'sid'        => '-1',
+        'version'    => '',
+        'dateline'    => TIME_NOW
+    );
+    $db->insert_query("templates", $insert_array);
     $insert_array = array(
         'title'        => 'residences_modcp_home_refuse',
         'template'    => $db->escape_string('<form action="modcp.php?action=residences" id="home_refuse" method="post">
@@ -422,7 +450,7 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
-    
+
 
     //CSS einfügen
     $css = array(
@@ -641,7 +669,7 @@ function residences_misc(){
             ");
 
             while($places = $db->fetch_array($select_place)){
-                $places_select .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']} ({$places['country']})</option>";
+                $places_select .= "<option value='{$places['place_id']}'>{$places['place']} ({$places['country']})</option>";
             }
             eval("\$residences_formresidence= \"" . $templates->get("residences_formresidence") . "\";");
         }
@@ -695,6 +723,8 @@ function residences_misc(){
                     $flat_check = "";
                     $flat_share_check = "";
                     $place_check ="";
+                    $places_editselect = "";
+                    $home_options  = "";
 
                     $count = 0;
                     $resident_query = $db->query("SELECT *
@@ -711,26 +741,7 @@ function residences_misc(){
 
 
                         if($mybb->user['uid'] == $resident['uid']){
-
-                            $select_place = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."places
-            ORDER BY place ASC
-            ");
-
-                            while($places = $db->fetch_array($select_place)){
-                                $place_check = "";
-                                $place_id_check = $places['place_id'];
-                                if($place_id ==  $place_id_check){
-                                    $place_check = "selected=\"selected\"";
-
-                                }
-                                $places_select .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']}";
-                            }
-
-                            $edit = "<a onclick=\"$('#edit_{$res_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\"><i class=\"fa fa-edit\" aria-hidden=\"true\"></i></a> <br />";
-
-                            eval("\$edit_resi = \"" . $templates->get ("residences_edit") . "\";");
-                            $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
+                             $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
                         } elseif($mybb->usergroup['canmodcp'] == 1){
                             $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
                         }
@@ -738,6 +749,8 @@ function residences_misc(){
                         eval("\$residences_resident .= \"" . $templates->get("residences_resident") . "\";");
 
                     }
+
+
                     if($homes['personcount'] != 0){
                         $personcount = "<div style='font-size:10px;'>".$count." von ".$homes['personcount']." offenen Plätzen besetzt </div>";
                     }
@@ -767,10 +780,10 @@ function residences_misc(){
                             $place_check = "";
                             $place_id_check = $places['place_id'];
                             if($place_id ==  $place_id_check){
-                                $place_check = "selected=\"selected\"";
+                                $place_check = "selected";
 
                             }
-                            $places_select .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']}";
+                            $places_editselect .= "<option value='{$places['place_id']}' {$place_check}>{$places['place']} test</option>";
                         }
 
 
