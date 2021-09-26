@@ -254,5 +254,12 @@
 // residences_modcp_places
 <tr><td class="trow1" align="center">{$country}</td><td class="trow2" align="center">{$place}</td><td class="trow1" align="center"><div style="font-size: 20px;">{$edit_place}<div class="modal" id="edit_{$place_id}" style="display: none;">{$edit_place_res}</div> {$delete} </div></td></tr>
 
+// residences_places
+<tr><td class="tcat"><strong>{$placename}</strong></td></tr>
+<tr><td><div class="flex">
+{$residences_home}
+	</div>
+	</td></tr>
+
 // residences_resident
 <div>{$user} {$move_out}</div>
