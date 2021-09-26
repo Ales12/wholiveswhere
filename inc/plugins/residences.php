@@ -165,7 +165,7 @@ function residences_install()
 <tr><td class="trow1"align="center">
 		<select name="place_id">
 			<option value="%">Stadt wählen</option>
-			{$places_select}
+			{$places_editselect}
 		</select>
 </td>
 <td class="trow2" align="center">
