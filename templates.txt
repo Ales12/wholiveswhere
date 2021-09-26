@@ -398,7 +398,21 @@ function residences_install()
         'dateline'    => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
-
+    $insert_array = array(
+        'title'        => 'residences_modcp_home',
+        'template'    => $db->escape_string('<tr><td  class="tcat" colspan="2"><div class="modcp_name">({$kind}) {$residence}</td></tr>
+<tr><td  class="trow2" colspan="2"> in {$place} ({$country})</td>
+<tr><td class="trow1" valign="top"><div style="text-align: center;">{$personcount} | eingereicht von {$user}</div>
+	<div>{$area} {$description}</div></td>
+	<td class="trow2" style="text-align: center;">
+		{$accept_home}
+		{$refuse_home}
+	</td></tr>'),
+        'sid'        => '-1',
+        'version'    => '',
+        'dateline'    => TIME_NOW
+    );
+    $db->insert_query("templates", $insert_array);
     $insert_array = array(
         'title'        => 'residences_modcp_home_refuse',
         'template'    => $db->escape_string('<form action="modcp.php?action=residences" id="home_refuse" method="post">
