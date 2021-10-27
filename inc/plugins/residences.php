@@ -75,8 +75,8 @@ function residences_install()
 
     $setting_array = array(
         'name' => 'reseidences_countrys',
-        'title' => 'Länder',
-        'description' => 'Welche Länder gibt es zur Auswahl?',
+        'title' => 'Kategorien',
+        'description' => 'In welchen Ländern, Ortsteile, Städte etc. kann eine Straße liegen? Dies sind die oberen Kategorien, zu diesen wiederum die Straßen bzw. Ortsteile zugeordnet werden.',
         'optionscode' => 'textarea',
         'value' => 'England, Schottland, Wales, Nordirland, Irland',
         'disporder' => 1,
