@@ -45,7 +45,7 @@ function residences_install()
           `res_id` int(10) NOT NULL auto_increment,
           `place_id` int(11) NOT NULL,
           `residence` varchar(500) CHARACTER SET utf8 NOT NULL,
-          `description` varchar(500) CHARACTER SET utf8 NOT NULL,
+          `description` text CHARACTER SET utf8 NOT NULL,
           `kind` varchar(500) CHARACTER SET utf8 NOT NULL,
           `personcount` varchar(500) CHARACTER SET utf8 NOT NULL,
             `accepted` int(10) NOT NULL,
