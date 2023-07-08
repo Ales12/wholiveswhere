@@ -1255,7 +1255,7 @@ function residences_modcp() {
             $uid = $owner_uid['uid'];
             $residence = $owner_uid['residence'];
             $description = $parser->parse_message($owner_uid['description'], $options);
-            $kind = $owner_uid['kind'];
+            $homenumber = $owner_uid['homenumber'];
 
 
 
@@ -1263,7 +1263,7 @@ function residences_modcp() {
                 "subject" => "Wohnort wurde abgelehnt",
                 "message" => "Leider wurde dein Wohnort abgelehnt. <br /> Als Grund wurde folgendes angegeben: {$refuse_reason} <br />
                     Das sind die Informationen, die du angegeben hast:<br />
-                   <b>Wohnort</b> {$residence} ({$kind})<br />
+                   <b>Wohnort</b> {$residence} ({$homenumber})<br />
                    <b>Beschreibung</b> {$description}<br />
                    <a href='misc.php?action=residences'>Zur Wer wohnt wo? Übersicht.</a>",
                 //to: wer muss die anfrage bestätigen
