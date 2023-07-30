@@ -104,7 +104,7 @@ function residences_install()
 </tr>
 <tr>
 <td class="trow1" align="center">
-	{$residence_alert}
+	{$place_alert}{$residence_alert}
 {$residences_formplace}
 	{$residences_formresidence}
 </td>
