@@ -1,8 +1,7 @@
 <?php
 
 // Disallow direct access to this file for security reasons
-if(!defined("IN_MYBB"))
-{
+if (!defined("IN_MYBB")) {
     die("Direct initialization of this file is not allowed.");
 }
 
@@ -13,35 +12,34 @@ $plugins->add_hook("admin_user_groups_edit_commit", "residences_usergroup_permis
 function residences_info()
 {
     return array(
-        "name"			=> "Residenzen Verwaltung",
-        "description"	=> "Hier kannst du die Residenz der Charakter verwalten. Hierbei können User selbstständig Wohnungen einreichen und sich in diese dann eintragen. ",
-        "website"		=> "",
-        "author"		=> "Ales",
-        "authorsite"	=> "",
-        "version"		=> "1.0",
-        "guid" 			=> "",
-        "codename"		=> "",
+        "name" => "Residenzen Verwaltung",
+        "description" => "Hier kannst du die Residenz der Charakter verwalten. Hierbei können User selbstständig Wohnungen einreichen und sich in diese dann eintragen. ",
+        "website" => "",
+        "author" => "Ales",
+        "authorsite" => "",
+        "version" => "1.0",
+        "guid" => "",
+        "codename" => "",
         "compatibility" => "*"
     );
 }
 
 function residences_install()
 {
-    global  $db, $cache;
+    global $db, $cache;
 
     //Datenbank erstellen
-    if($db->engine=='mysql'||$db->engine=='mysqli')
-    {
-        $db->query("CREATE TABLE `".TABLE_PREFIX."places` (
+    if ($db->engine == 'mysql' || $db->engine == 'mysqli') {
+        $db->query("CREATE TABLE `" . TABLE_PREFIX . "places` (
           `place_id` int(10) NOT NULL auto_increment,
           `country` varchar(500) CHARACTER SET utf8 NOT NULL,
           `place` varchar(500) CHARACTER SET utf8 NOT NULL,
                       `accepted` int(10) NOT NULL,
                  `uid` int(10) NOT NULL,
           PRIMARY KEY (`place_id`)
-        ) ENGINE=MyISAM".$db->build_create_table_collation());
+        ) ENGINE=MyISAM" . $db->build_create_table_collation());
 
-        $db->query("CREATE TABLE `".TABLE_PREFIX."residence` (
+        $db->query("CREATE TABLE `" . TABLE_PREFIX . "residence` (
           `res_id` int(10) NOT NULL auto_increment,
           `place_id` int(11) NOT NULL,
           `residence` varchar(500) CHARACTER SET utf8 NOT NULL,
@@ -51,18 +49,18 @@ function residences_install()
             `accepted` int(10) NOT NULL,
                  `uid` int(10) NOT NULL,
           PRIMARY KEY (`res_id`)
-        ) ENGINE=MyISAM".$db->build_create_table_collation());
+        ) ENGINE=MyISAM" . $db->build_create_table_collation());
     }
 
-    $db->query("ALTER TABLE `".TABLE_PREFIX."users` ADD `res_id` int(10) NOT NULL;");
+    $db->query("ALTER TABLE `" . TABLE_PREFIX . "users` ADD `res_id` int(10) NOT NULL;");
 
     $db->add_column("usergroups", "canaddplace", "tinyint NOT NULL default '1'");
     $db->add_column("usergroups", "canjoinplace", "tinyint NOT NULL default '1'");
     $cache->update_usergroups();
 
     /*
- * nun kommen die Einstellungen
- */
+     * nun kommen die Einstellungen
+     */
     $setting_group = array(
         'name' => 'residences',
         'title' => 'Einstellungen für die Wer wohnt wo?',
@@ -80,7 +78,7 @@ function residences_install()
         'optionscode' => 'textarea',
         'value' => 'England, Schottland, Wales, Nordirland, Irland',
         'disporder' => 1,
-        "gid" => (int)$gid
+        "gid" => (int) $gid
     );
     $db->insert_query('settings', $setting_array);
 
@@ -91,8 +89,8 @@ function residences_install()
     //Templates
 
     $insert_array = array(
-        'title'        => 'residences',
-        'template'    => $db->escape_string('<html>
+        'title' => 'residences',
+        'template' => $db->escape_string('<html>
 <head>
 <title>{$mybb->settings[\'bbname\']} - {$lang->wholiveswho}</title>
 {$headerinclude}
@@ -120,42 +118,42 @@ function residences_install()
 {$footer}
 </body>
 </html>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_country',
-        'template'    => $db->escape_string('<table width="100%">
+        'title' => 'residences_country',
+        'template' => $db->escape_string('<table width="100%">
 	<tr><td class="tcat" colspan="2"><strong>{$country}</strong></td></tr>
 	{$residences_place}
 </table>
 '),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
     $insert_array = array(
-        'title'        => 'residences_place',
-        'template'    => $db->escape_string('<tr><td class="tcat"><div class="headline3">{$placename}</div></td></tr>
+        'title' => 'residences_place',
+        'template' => $db->escape_string('<tr><td class="tcat"><div class="headline3">{$placename}</div></td></tr>
 <tr><td><div class="flex">
 {$residences_home}
 	</div>
 	</td></tr>
 '),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
 
     $insert_array = array(
-        'title'        => 'residences_edit',
-        'template'    => $db->escape_string('<form action="misc.php?action=residences" id="residences" method="post">
+        'title' => 'residences_edit',
+        'template' => $db->escape_string('<form action="misc.php?action=residences" id="residences" method="post">
 	  <input type="hidden" name="res_id" id="res_id" value="{$res_id}" class="textbox" />
 <table style="width: 80%;"  border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
 <tr><td class="thead" colspan="2"><strong>Wohnung editieren</strong></td></tr>
@@ -197,20 +195,20 @@ function residences_install()
 		</select>
 		</td>
 	</tr>
-	
+
 	<tr>
 <td colspan="5" class="trow1" align="center"><input type="submit" name="edithome" value="Wohnort editieren" id="submit" class="button"></td></tr>
 </table>
 </form>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_edit_place',
-        'template'    => $db->escape_string('<form action="modcp.php?action=residences" id="places" method="post">
+        'title' => 'residences_edit_place',
+        'template' => $db->escape_string('<form action="modcp.php?action=residences" id="places" method="post">
 	  <input type="hidden" name="place_id" id="place_id" value="{$place_id}" class="textbox" />
 <table width="80%">
 <tr><td class="thead" colspan="4"><strong>{$lang->wlw_edit_place}</strong></td></tr>
@@ -227,15 +225,15 @@ function residences_install()
 <td colspan="2" class="trow1" align="center"><input type="submit" name="editplace" value="Ort bearbeiten" id="submit" class="button"></td></tr>
 </table>
 </form>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_formplace',
-        'template'    => $db->escape_string('<form action="misc.php?action=residences" id="places" method="post">
+        'title' => 'residences_formplace',
+        'template' => $db->escape_string('<form action="misc.php?action=residences" id="places" method="post">
 <table width="100%">
 <tr><td class="thead" colspan="4"><strong>{$lang->wlw_add_new_world}</strong></td></tr>
 <tr><td class="tcat"><strong>{$lang->wlw_country}</strong></td>
@@ -250,19 +248,19 @@ function residences_install()
 <td class="trow2" align="center">
 <input type="text" name="place" id="place" value="" class="textbox" />
 </td>
-<td colspan="2" class="trow1" align="center">	
+<td colspan="2" class="trow1" align="center">
 	<input type="submit" name="addplace" value="Ort hinzufügen" id="submit" class="button"></td></tr>
 </table>
 </form><br />'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_formresidence',
-        'template'    => $db->escape_string('<form action="misc.php?action=residences" id="residences" method="post">
+        'title' => 'residences_formresidence',
+        'template' => $db->escape_string('<form action="misc.php?action=residences" id="residences" method="post">
 <table width="100%">
 <tr><td class="thead" colspan="5"><strong>{$lang->wlw_add_home}</strong></td></tr>
 <tr><td class="tcat"><strong>{$lang->wlw_homeplace}</strong></td>
@@ -299,38 +297,38 @@ function residences_install()
 		</select>
 		</td>
 	</tr>
-	
+
 	<tr>
 <td colspan="5" class="trow1" align="center"><input type="submit" name="addhome" value="Ort hinzufügen" id="submit" class="button"></td></tr>
 </table>
 </form><br />'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_home',
-        'template'    => $db->escape_string('<div class="residences_home">
+        'title' => 'residences_home',
+        'template' => $db->escape_string('<div class="residences_home">
 	<div class="home_title">{$residence}</div>
 	<div class="home_kind">{$kind}</div>
 	<div class="home_desc">{$description}</div>
 	<div class="home_info">{$personcount}
 		{$residences_resident}
 {$move_in}
-	</div>	
+	</div>
 {$home_options}
 </div>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_modcp',
-        'template'    => $db->escape_string('<html>
+        'title' => 'residences_modcp',
+        'template' => $db->escape_string('<html>
 <head>
 <title>{$mybb->settings[\'bbname\']} - {$lang->wlw_modcp}</title>
 {$headerinclude}
@@ -351,8 +349,8 @@ function residences_install()
 						<div class="modcp_name">{$lang->wlw_places}</div>		</td></tr>	<tr><td class="trow1" colspan="3" align="center">{$accept_all_place}</td></tr>
 					<tr><td><div class="modcp_cat">{$lang->wlw_country}</div></td><td><div class="modcp_cat">{$lang->wlw_place}</div></td><td><div class="modcp_cat">{$lang->wlw_modcp_options}</div></td></tr>
 					{$residences_modcp_country}
-						
-					
+
+
 						</table>
 					<br />
 					<br />
@@ -361,7 +359,7 @@ function residences_install()
 					<div class="modcp_name">{$lang->wlw_homes}</div>		</td></tr>
 <tr><td class="trow1" colspan="2" align="center">{$accept_all_home}</td></tr>
 					{$residences_modcp_home}
-											
+
 						</table>
 										<br />
 					<br />
@@ -373,7 +371,7 @@ function residences_install()
 						</table>
 </td>
 </tr>
-							
+
 					</table>
 
 				</td>
@@ -383,24 +381,24 @@ function residences_install()
 	{$footer}
 </body>
 </html>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_modcp_country',
-        'template'    => $db->escape_string('<tr><td class="trow1">{$country}</td><td class="trow2">{$place}</td><td class="trow1">{$accept} {$refuse}</td></tr>
+        'title' => 'residences_modcp_country',
+        'template' => $db->escape_string('<tr><td class="trow1">{$country}</td><td class="trow2">{$place}</td><td class="trow1">{$accept} {$refuse}</td></tr>
 '),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
     $insert_array = array(
-        'title'        => 'residences_modcp_home',
-        'template'    => $db->escape_string('<tr><td  class="tcat" colspan="2"><div class="modcp_name">({$kind}) {$residence}</td></tr>
+        'title' => 'residences_modcp_home',
+        'template' => $db->escape_string('<tr><td  class="tcat" colspan="2"><div class="modcp_name">({$kind}) {$residence}</td></tr>
 <tr><td  class="trow2" colspan="2"> in {$place} ({$country})</td>
 <tr><td class="trow1" valign="top"><div style="text-align: center;">{$personcount} | eingereicht von {$user}</div>
 	<div>{$area} {$description}</div></td>
@@ -408,14 +406,14 @@ function residences_install()
 		{$accept_home}
 		{$refuse_home}
 	</td></tr>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
     $insert_array = array(
-        'title'        => 'residences_modcp_home_refuse',
-        'template'    => $db->escape_string('<form action="modcp.php?action=residences" id="home_refuse" method="post">
+        'title' => 'residences_modcp_home_refuse',
+        'template' => $db->escape_string('<form action="modcp.php?action=residences" id="home_refuse" method="post">
 <table width="150px">
 <tr>
 <td class="trow2" align="center">
@@ -423,31 +421,31 @@ function residences_install()
 <textarea class="textarea" name="refuse_reason" id="refuse_reason" rows="2" cols="15" style="width: 100%">Ablehnungsgrund angeben.</textarea>
 	</td></tr>
 	<tr>
-<td class="trow1" align="center">	
+<td class="trow1" align="center">
 	<input type="submit" name="refuse_home" value="Wohnort ablehnen" id="submit" class="button"></td></tr>
 </table>
 </form>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_modcp_places',
-        'template'    => $db->escape_string('<tr><td class="trow1" align="center">{$country}</td><td class="trow2" align="center">{$place}</td><td class="trow1" align="center"><div style="font-size: 20px;">{$edit_place}<div class="modal" id="edit_{$place_id}" style="display: none;">{$edit_place_res}</div> {$delete} </div></td></tr>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'title' => 'residences_modcp_places',
+        'template' => $db->escape_string('<tr><td class="trow1" align="center">{$country}</td><td class="trow2" align="center">{$place}</td><td class="trow1" align="center"><div style="font-size: 20px;">{$edit_place}<div class="modal" id="edit_{$place_id}" style="display: none;">{$edit_place_res}</div> {$delete} </div></td></tr>'),
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
     $insert_array = array(
-        'title'        => 'residences_resident',
-        'template'    => $db->escape_string('<div>{$user} {$move_out}</div>'),
-        'sid'        => '-1',
-        'version'    => '',
-        'dateline'    => TIME_NOW
+        'title' => 'residences_resident',
+        'template' => $db->escape_string('<div>{$user} {$move_out}</div>'),
+        'sid' => '-1',
+        'version' => '',
+        'dateline' => TIME_NOW
     );
     $db->insert_query("templates", $insert_array);
 
@@ -457,7 +455,7 @@ function residences_install()
         'name' => 'residences.css',
         'tid' => 1,
         'attachedto' => '',
-        "stylesheet" =>    '.home_title{
+        "stylesheet" => '.home_title{
 font-family: Tahoma, Verdana, Arial, Sans-Serif;
 font-size: 15px;
 text-transform: uppercase;
@@ -513,8 +511,7 @@ text-align: center;
 function residences_is_installed()
 {
     global $db;
-    if($db->table_exists("residence"))
-    {
+    if ($db->table_exists("residence")) {
         return true;
     }
     return false;
@@ -569,7 +566,7 @@ function residences_activate()
 	<tbody style="{$collapsed[\'modcpusers_e\']}" id="modcpusers_e">
 {$residence_modcp}
 	</tbody>');
-    find_replace_templatesets("header", "#".preg_quote('{$awaitingusers}')."#i", '{$awaitingusers}{$residence_alert_place} {$residence_alert_home}');
+    find_replace_templatesets("header", "#" . preg_quote('{$awaitingusers}') . "#i", '{$awaitingusers}{$residence_alert_place} {$residence_alert_home}');
 
 }
 
@@ -585,7 +582,7 @@ function residences_deactivate()
 	<tbody style="{$collapsed[\'modcpusers_e\']}" id="modcpusers_e">
 {$residence_modcp}
 	</tbody>') . "#i", '', 0);
-    find_replace_templatesets("header", "#".preg_quote('{$residence_alert_place} {$residence_alert_home}')."#i", '', 0);
+    find_replace_templatesets("header", "#" . preg_quote('{$residence_alert_place} {$residence_alert_home}') . "#i", '', 0);
 }
 
 
@@ -594,13 +591,12 @@ function residences_usergroup_permission()
 {
     global $mybb, $lang, $form, $form_container, $run_module;
 
-    if($run_module == 'user' && !empty($form_container->_title) & !empty($lang->misc) & $form_container->_title == $lang->misc)
-    {
+    if ($run_module == 'user' && !empty($form_container->_title) & !empty($lang->misc) & $form_container->_title == $lang->misc) {
         $residences_options = array(
             $form->generate_check_box('canaddplace', 1, "Kann Ort hinzufügen?", array("checked" => $mybb->input['canaddplace'])),
             $form->generate_check_box('canjoinplace', 1, "Kann Wohnung hinzufügen?", array("checked" => $mybb->input['canjoinplace'])),
         );
-        $form_container->output_row("Residenzen Verwaltung", "", "<div class=\"group_settings_bit\">".implode("</div><div class=\"group_settings_bit\">", $residences_options)."</div>");
+        $form_container->output_row("Residenzen Verwaltung", "", "<div class=\"group_settings_bit\">" . implode("</div><div class=\"group_settings_bit\">", $residences_options) . "</div>");
     }
 }
 
@@ -616,14 +612,16 @@ function residences_usergroup_permission_commit()
 $plugins->add_hook('misc_start', 'residences_misc');
 
 
-function residences_misc(){
-    global $mybb, $templates, $lang, $header, $headerinclude, $residence_alert, $footer, $page, $db, $places_select, $edit_resi, $edit, $place_check, $country_select, $place_delete, $lang, $home_options;
+function residences_misc()
+{
+    global $mybb, $templates, $lang, $header, $headerinclude, $residence_alert, $footer, $page, $db, $place_alert, $places_select, $edit_resi, $edit, $place_check, $country_select, $place_delete, $lang, $home_options;
     //Die Sprachdatei
     $lang->load('residences');
-    require_once MYBB_ROOT."inc/class_parser.php";;
+    require_once MYBB_ROOT . "inc/class_parser.php";
+    ;
     $parser = new postParser;
 
-    if($mybb->get_input('action') == 'residences') {
+    if ($mybb->get_input('action') == 'residences') {
         // Do something, for example I'll create a page using the hello_world_template
         $options = array(
             "allow_html" => 1,
@@ -638,14 +636,29 @@ function residences_misc(){
         add_breadcrumb('Wer wohnt wo?', "misc.php?action=residences");
         $uid = $mybb->user['uid'];
 
+
         $alertquery = $db->fetch_array($db->query("select *
-        from ".TABLE_PREFIX."residence
+        from " . TABLE_PREFIX . "places
         WHERE accepted = 0
         "));
 
-        if($alertquery['uid'] == $uid){
-            $residence_alert ="<div class=\"red_alert\">Dein Wohnort muss nun vom Team freigeschaltet werden.</div>";
-        } else{
+        if ($alertquery['uid'] == $uid) {
+            $place_alert = "<div class=\"red_alert\">Dein Ort muss nun vom Team freigeschaltet werden.</div>";
+        } else {
+            $place_alert = "";
+        }
+
+
+
+
+        $alertquery = $db->fetch_array($db->query("select *
+        from " . TABLE_PREFIX . "residence
+        WHERE accepted = 0
+        "));
+
+        if ($alertquery['uid'] == $uid) {
+            $residence_alert = "<div class=\"red_alert\">Dein Wohnort muss nun vom Team freigeschaltet werden.</div>";
+        } else {
             $residence_alert = "";
         }
 
@@ -655,7 +668,7 @@ function residences_misc(){
 
         if ($mybb->usergroup['canaddplace'] == 1) {
 
-            foreach ($countrys as $country){
+            foreach ($countrys as $country) {
                 $country_select .= "<option value='{$country}'>{$country}</option>";
             }
             eval("\$residences_formplace = \"" . $templates->get("residences_formplace") . "\";");
@@ -664,11 +677,11 @@ function residences_misc(){
         if ($mybb->usergroup['canjoinplace'] == 1) {
 
             $select_place = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."places
+            FROM " . TABLE_PREFIX . "places
             ORDER BY country ASC, place ASC
             ");
 
-            while($places = $db->fetch_array($select_place)){
+            while ($places = $db->fetch_array($select_place)) {
                 $places_select .= "<option value='{$places['place_id']}'>{$places['place']} ({$places['country']})</option>";
             }
             eval("\$residences_formresidence= \"" . $templates->get("residences_formresidence") . "\";");
@@ -676,18 +689,18 @@ function residences_misc(){
 
 
 
-        foreach ($countrys as $country){
+        foreach ($countrys as $country) {
             $residences_place = "";
             $residences_place = "";
 
             $query_places = $db->query("SELECT *
-        from ".TABLE_PREFIX."places
-        WHERE country = '".$country."'
+        from " . TABLE_PREFIX . "places
+        WHERE country = '" . $country . "'
         AND accepted = 1
         ORDER BY place ASC
         ");
 
-            while($places = $db->fetch_array($query_places)){
+            while ($places = $db->fetch_array($query_places)) {
                 $placename = "";
 
                 $placename = $places['place'];
@@ -696,14 +709,14 @@ function residences_misc(){
                 $residences_home = "";
 
                 $query_home = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."residence
-            WHERE place_id = '".$place_id."'
+            FROM " . TABLE_PREFIX . "residence
+            WHERE place_id = '" . $place_id . "'
             AND accepted = 1
             ORDER BY residence ASC
-        
+
             ");
 
-                while($homes = $db->fetch_array($query_home)){
+                while ($homes = $db->fetch_array($query_home)) {
 
                     $kind = "";
 
@@ -717,32 +730,32 @@ function residences_misc(){
                     $place_id = $homes['place_id'];
                     $personcount = "";
                     $residences_resident = "";
-                    $move_in ="";
+                    $move_in = "";
                     $move_out = "";
-                    $house_check= "";
+                    $house_check = "";
                     $flat_check = "";
                     $flat_share_check = "";
-                    $place_check ="";
+                    $place_check = "";
                     $places_editselect = "";
-                    $home_options  = "";
+                    $home_options = "";
 
                     $count = 0;
                     $resident_query = $db->query("SELECT *
-                FROM ".TABLE_PREFIX."users
-                WHERE res_id = '".$res_id."'
+                FROM " . TABLE_PREFIX . "users
+                WHERE res_id = '" . $res_id . "'
                 ORDER BY username ASC
                 ");
 
-                    while($resident = $db->fetch_array($resident_query)){
+                    while ($resident = $db->fetch_array($resident_query)) {
                         $count++;
 
                         $username = format_name($resident['username'], $resident['usergroup'], $resident['displaygroup']);
                         $user = build_profile_link($username, $resident['uid']);
 
 
-                        if($mybb->user['uid'] == $resident['uid']){
-                             $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
-                        } elseif($mybb->usergroup['canmodcp'] == 1){
+                        if ($mybb->user['uid'] == $resident['uid']) {
+                            $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
+                        } elseif ($mybb->usergroup['canmodcp'] == 1) {
                             $move_out = "<a href='misc.php?action=residences&moveout={$res_id}&uid=$resident[uid]' title='Ausziehen'><i class=\"fas fa-sign-out-alt\"></i></a>";
                         }
 
@@ -751,35 +764,35 @@ function residences_misc(){
                     }
 
 
-                    if($homes['personcount'] != 0){
-                        $personcount = "<div style='font-size:10px;'>".$count." von ".$homes['personcount']." offenen Plätzen besetzt </div>";
+                    if ($homes['personcount'] != 0) {
+                        $personcount = "<div style='font-size:10px;'>" . $count . " von " . $homes['personcount'] . " offenen Plätzen besetzt </div>";
                     }
 
-                    if($mybb->usergroup['canmodcp'] == 1 OR $mybb->user['uid'] == $homes['uid']){
+                    if ($mybb->usergroup['canmodcp'] == 1 or $mybb->user['uid'] == $homes['uid']) {
 
-                        if($kind == 'houses'){
-                            $house_check= "selected=\"selected\"";
+                        if ($kind == 'houses') {
+                            $house_check = "selected=\"selected\"";
                             $flat_check = "";
                             $flat_share_check = "";
-                        }elseif($kind == 'flat'){
-                            $house_check= "";
+                        } elseif ($kind == 'flat') {
+                            $house_check = "";
                             $flat_check = "selected=\"selected\"";
                             $flat_share_check = "";
-                        }elseif($kind == 'flat_share'){
-                            $house_check= "";
+                        } elseif ($kind == 'flat_share') {
+                            $house_check = "";
                             $flat_check = "";
                             $flat_share_check = "selected=\"selected\"";
                         }
 
                         $select_place = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."places
+            FROM " . TABLE_PREFIX . "places
             ORDER BY place ASC
             ");
 
-                        while($places = $db->fetch_array($select_place)){
+                        while ($places = $db->fetch_array($select_place)) {
                             $place_check = "";
                             $place_id_check = $places['place_id'];
-                            if($place_id ==  $place_id_check){
+                            if ($place_id == $place_id_check) {
                                 $place_check = "selected";
 
                             }
@@ -789,7 +802,7 @@ function residences_misc(){
 
                         $edit = "<a onclick=\"$('#edit_{$res_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\">Wohnort Editieren</a> ";
 
-                        eval("\$edit_resi = \"" . $templates->get ("residences_edit") . "\";");
+                        eval("\$edit_resi = \"" . $templates->get("residences_edit") . "\";");
                         $place_delete = "| <a href='misc.php?action=residences&place_delete=$res_id' title='Wohnort löschen'>Wohnort Löschen</a>";
                         $home_options = "<div class=\"home_control\">
                                            {$edit}<div class=\"modal\" id=\"edit_{$res_id}\" style=\"display: none;\">{$edit_resi}</div>
@@ -798,7 +811,7 @@ function residences_misc(){
 
 
 
-                    if($mybb->usergroup['canjoinplace'] == 1 ) {
+                    if ($mybb->usergroup['canjoinplace'] == 1) {
                         if ($mybb->user['res_id'] != $res_id) {
                             if ($homes['personcount'] != $count) {
                                 $move_in = "<a href='misc.php?action=residences&movein={$res_id}' title='Einziehen'><i class=\"fas fa-truck-moving\"></i> Einziehen</a>";
@@ -822,22 +835,22 @@ function residences_misc(){
 
 
         //Den Ort hinzufügen
-        if(isset($_POST['addplace'])) {
-            $country  = $_POST['country'];
+        if (isset($_POST['addplace'])) {
+            $country = $_POST['country'];
             $place = $_POST['place'];
 
 
-            if($mybb->usergroup['canmodcp'] == 1){
+            if ($mybb->usergroup['canmodcp'] == 1) {
                 $accepted = 1;
-            } else{
+            } else {
                 $accepted = 0;
             }
 
             $new_record = array(
                 "country" => $db->escape_string($country),
                 "place" => $db->escape_string($place),
-                "uid" => (int)$mybb->user['uid'],
-                "accepted" => (int)$accepted
+                "uid" => (int) $mybb->user['uid'],
+                "accepted" => (int) $accepted
             );
 
             $db->insert_query("places", $new_record);
@@ -845,7 +858,7 @@ function residences_misc(){
         }
 
         //neuen Wohnung einfügen
-        if(isset($_POST['addhome'])) {
+        if (isset($_POST['addhome'])) {
             $place_id = $_POST['place_id'];
             $residence = $_POST['residence'];
             $description = $_POST['description'];
@@ -853,9 +866,9 @@ function residences_misc(){
             $personcount = $_POST['personcount'];
 
 
-            if($mybb->usergroup['canmodcp'] == 1){
+            if ($mybb->usergroup['canmodcp'] == 1) {
                 $accepted = 1;
-            } else{
+            } else {
                 $accepted = 0;
             }
 
@@ -866,7 +879,7 @@ function residences_misc(){
                 "kind" => $db->escape_string($kind),
                 "personcount" => $db->escape_string($personcount),
                 "accepted" => (int) $accepted,
-                "uid" => (int)$mybb->user['uid'],
+                "uid" => (int) $mybb->user['uid'],
 
             );
 
@@ -876,49 +889,49 @@ function residences_misc(){
 
         //Wohnung editieren
 
-        if(isset($_POST['edithome'])) {
+        if (isset($_POST['edithome'])) {
             $res_id = (int) $mybb->get_input('res_id');
             $place_id = (int) $mybb->get_input('place_id');
             $residence = $db->escape_string($mybb->get_input('residence'));
             $description = $db->escape_string($mybb->get_input('description'));
             $kind = $db->escape_string($mybb->get_input('kind'));
-            $personcount = (int)$mybb->get_input('personcount');
+            $personcount = (int) $mybb->get_input('personcount');
 
 
-            $db->query("UPDATE ".TABLE_PREFIX."residence SET place_id ='".$place_id."', residence = '".$residence."', description = '".$description."', kind = '".$kind."',  personcount = '".$personcount."' WHERE res_id = '".$res_id."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "residence SET place_id ='" . $place_id . "', residence = '" . $residence . "', description = '" . $description . "', kind = '" . $kind . "',  personcount = '" . $personcount . "' WHERE res_id = '" . $res_id . "'");
             redirect("misc.php?action=residences");
         }
 
         //Einziehen
         $movein = $mybb->input['movein'];
-        if($movein){
+        if ($movein) {
             $uid = $mybb->user['uid'];
 
-            $db->query("UPDATE ".TABLE_PREFIX."users SET res_id ='".$movein."' WHERE uid = '".$uid."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "users SET res_id ='" . $movein . "' WHERE uid = '" . $uid . "'");
             redirect("misc.php?action=residences");
 
         }
 
         //Auziehen
         $moveout = $mybb->input['moveout'];
-        if($moveout){
+        if ($moveout) {
             $uid = $mybb->input['uid'];
 
-            $db->query("UPDATE ".TABLE_PREFIX."users SET res_id = 0 WHERE uid = '".$uid."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "users SET res_id = 0 WHERE uid = '" . $uid . "'");
             redirect("misc.php?action=residences");
 
         }
         //wohnort ablehnen
         $refuse_home = $mybb->input['place_delete'];
-        if($refuse_home){
+        if ($refuse_home) {
 
             $db->delete_query("residence", "res_id = '$refuse_home'");
             redirect("misc.php?action=residences");
 
         }
 
-        eval("\$menu = \"".$templates->get("listen_nav")."\";");
-        eval('$page = "'.$templates->get('residences').'";'); // Hier wird das erstellte Template geladen
+        eval("\$menu = \"" . $templates->get("listen_nav") . "\";");
+        eval('$page = "' . $templates->get('residences') . '";'); // Hier wird das erstellte Template geladen
         output_page($page);
 
     }
@@ -928,7 +941,8 @@ function residences_misc(){
 $plugins->add_hook("modcp_nav", "residences_modcp_nav");
 
 
-function residences_modcp_nav(){
+function residences_modcp_nav()
+{
     global $residence_modcp, $lang;
     //Die Sprachdatei
     $lang->load('residences');
@@ -939,17 +953,19 @@ function residences_modcp_nav(){
  * Hier kannst du die Orte bearbeiten
  */
 $plugins->add_hook("modcp_start", "residences_modcp");
-function residences_modcp() {
+function residences_modcp()
+{
 
     global $mybb, $templates, $lang, $header, $headerinclude, $footer, $application, $db, $page, $accept_all_place, $accept_all_home, $edit_place, $country_select, $delete, $modcp_nav, $lang;
     //Die Sprachdatei
     $lang->load('residences');
-    require_once MYBB_ROOT."inc/datahandlers/pm.php";
+    require_once MYBB_ROOT . "inc/datahandlers/pm.php";
     $pmhandler = new PMDataHandler();
-    require_once MYBB_ROOT."inc/class_parser.php";;
+    require_once MYBB_ROOT . "inc/class_parser.php";
+    ;
     $parser = new postParser;
 
-    if($mybb->get_input('action') == 'residences') {
+    if ($mybb->get_input('action') == 'residences') {
         // Do something, for example I'll create a page using the hello_world_template
 
         // Add a breadcrumb
@@ -967,17 +983,17 @@ function residences_modcp() {
 
         //alle einegangenen Orte, welche noch vom team bearbeitet werden müssen.
         $new_places = $db->query("select *
-        from ".TABLE_PREFIX."places
+        from " . TABLE_PREFIX . "places
         where accepted = 0
         ");
 
-        while($row = $db->fetch_array($new_places)){
+        while ($row = $db->fetch_array($new_places)) {
 
             $country = $row['country'];
             $place = $row['place'];
 
-            $accept = "<a href='modcp.php?action=residences&accept=$row[place_id]'>Ort Akzeptieren</a>";
-            $refuse = "<a href='modcp.php?action=residences&refuse=$row[place_id]'>Ort Ablehnen</a>";
+            $accept = "<a href='modcp.php?action=residences&place_accept={$row['place_id']}'>Ort Akzeptieren</a>";
+            $refuse = "<a href='modcp.php?action=residences&place_refuse={$row['place_id']}'>Ort Ablehnen</a>";
 
 
             eval("\$residences_modcp_country .= \"" . $templates->get("residences_modcp_country") . "\";");
@@ -990,13 +1006,13 @@ function residences_modcp() {
 
         //Anfragen der Wohnorte, um diese entweder abzulehnen oder anzunehmen
         $new_home = $db->query("select *, r.uid
-        from ".TABLE_PREFIX."residence r
-        left join ".TABLE_PREFIX."places p
+        from " . TABLE_PREFIX . "residence r
+        left join " . TABLE_PREFIX . "places p
         on (r.place_id = p.place_id)
         where r.accepted = 0
         ");
 
-        while($row = $db->fetch_array($new_home)){
+        while ($row = $db->fetch_array($new_home)) {
             $refuse_home = "";
             $residence = $row['residence'];
             $description = $parser->parse_message($row['description'], $options);
@@ -1006,8 +1022,8 @@ function residences_modcp() {
 
 
             $chara_query = $db->query("SELECT *
-            FROM ".TABLE_PREFIX."users
-            WHERE uid = '".$uid."'
+            FROM " . TABLE_PREFIX . "users
+            WHERE uid = '" . $uid . "'
             ");
             $chara = $db->fetch_array($chara_query);
 
@@ -1015,8 +1031,8 @@ function residences_modcp() {
             $user = build_profile_link($username, $chara['uid']);
 
             $place = $row['place'];
-            if($row['personcount'] != 0){
-                $personcount = $row['personcount']." Person(en) können einziehen.";
+            if ($row['personcount'] != 0) {
+                $personcount = $row['personcount'] . " Person(en) können einziehen.";
             }
 
             $accept_home = "<a href='modcp.php?action=residences&accept_home=$row[res_id]'>Wohnung Akzeptieren</a>";
@@ -1032,22 +1048,23 @@ function residences_modcp() {
         $country_array = $mybb->settings['reseidences_countrys'];
         $countrys = explode(", ", $country_array);
 
-        foreach ($countrys as $country_all){
+        foreach ($countrys as $country_all) {
 
             $select_country = "";
-            if($country == $country_all){
+            if ($country == $country_all) {
                 $select_country = "selected=\"selected\"";
             }
 
             $country_select .= "<option value='{$country_all}' {$select_country}>{$country_all}</option>";
         }
-//Gebe alle Orte aus, um sie löschen oder bearbeiten zu können
+        //Gebe alle Orte aus, um sie löschen oder bearbeiten zu können
         $select = $db->query("SELECT *
-        FROM ".TABLE_PREFIX."places
+        FROM " . TABLE_PREFIX . "places
+        WHERE accepted = 1
         order by country ASC, place ASC
         ");
 
-        while($row = $db->fetch_array($select)){
+        while ($row = $db->fetch_array($select)) {
             $place_id = $row['place_id'];
 
             $country = $row['country'];
@@ -1059,18 +1076,18 @@ function residences_modcp() {
             $delete = "<a href='modcp.php?action=residences&delete_place=$place_id' title='Ort löschen'><i class=\"fas fa-trash-alt\"></i></a>";
             $edit_place = "<a onclick=\"$('#edit_{$place_id}').modal({ fadeDuration: 250, keepelement: true, zIndex: (typeof modal_zindex !== 'undefined' ? modal_zindex : 9999) }); return false;\" style=\"cursor: pointer;\"><i class=\"fas fa-edit\" title=\"Wohnort editieren\"></i></a>";
 
-            eval("\$edit_place_res = \"" . $templates->get ("residences_edit_place") . "\";");
+            eval("\$edit_place_res = \"" . $templates->get("residences_edit_place") . "\";");
             eval("\$residences_modcp_places .= \"" . $templates->get("residences_modcp_places") . "\";");
         }
 
         $accept_uid = $mybb->user['uid'];
         //Ort annehmen
-        $accept = $mybb->input['accept'];
-        if($accept){
+        $accept = $mybb->input['place_accept'];
+        if ($accept) {
 
             $place_owner = $db->query("SELECT uid
-            from ".TABLE_PREFIX."places
-           WHERE place_id = '".$accept."'
+            from " . TABLE_PREFIX . "places
+           WHERE place_id = '" . $accept . "'
             ");
 
             $owner_uid = $db->fetch_array($place_owner);
@@ -1087,23 +1104,23 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
 
-            $db->query("UPDATE ".TABLE_PREFIX."places SET accepted =1 WHERE place_id = '".$accept."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "places SET accepted =1 WHERE place_id = '" . $accept . "'");
             redirect("modcp.php?action=residences");
         }
 
         //alle Ort annehmen
         $accept_all_places = $mybb->input['accept_all_places'];
-        if($accept_all_places){
+        if ($accept_all_places) {
 
             $place_owner = $db->query("SELECT uid
-            from ".TABLE_PREFIX."places
+            from " . TABLE_PREFIX . "places
            WHERE accepted = 0
             ");
 
@@ -1121,23 +1138,23 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
-            $db->query("UPDATE ".TABLE_PREFIX."places SET accepted = 1");
+            $db->query("UPDATE " . TABLE_PREFIX . "places SET accepted = 1");
             redirect("modcp.php?action=residences");
         }
 
         //Ort ablehnen
-        $refuse_place = $mybb->input['refuse'];
-        if($refuse_place){
+        $refuse_place = $mybb->input['place_refuse'];
+        if ($refuse_place) {
 
             $place_owner = $db->query("SELECT *
-            from ".TABLE_PREFIX."places
-           WHERE place_id = '".$refuse_place."'
+            from " . TABLE_PREFIX . "places
+           WHERE place_id = '" . $refuse_place . "'
             ");
 
             $owner_uid = $db->fetch_array($place_owner);
@@ -1156,14 +1173,14 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
 
-            $db->delete_query("places", "place_id = '$refuse'");
+            $db->delete_query("places", "place_id = '$refuse_place'");
             redirect("modcp.php?action=residences");
 
         }
@@ -1171,11 +1188,11 @@ function residences_modcp() {
 
         //wohnort annehmen
         $accept_home = $mybb->input['accept_home'];
-        if($accept_home){
+        if ($accept_home) {
 
             $home_owner = $db->query("SELECT uid
-            from ".TABLE_PREFIX."residence
-           WHERE res_id = '".$accept_home."'
+            from " . TABLE_PREFIX . "residence
+           WHERE res_id = '" . $accept_home . "'
             ");
 
             $owner_uid = $db->fetch_array($home_owner);
@@ -1192,23 +1209,23 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
 
-            $db->query("UPDATE ".TABLE_PREFIX."residence SET accepted =1 WHERE res_id = '".$accept_home."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "residence SET accepted =1 WHERE res_id = '" . $accept_home . "'");
             redirect("modcp.php?action=residences");
         }
 
         //alle wohnorte annehmen
         $accept_all_residence = $mybb->input['accept_all_home'];
-        if($accept_all_residence){
+        if ($accept_all_residence) {
 
             $home_owner = $db->query("SELECT uid
-            from ".TABLE_PREFIX."residence
+            from " . TABLE_PREFIX . "residence
            WHERE accepted = 0
             ");
 
@@ -1226,28 +1243,28 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
 
-            $db->query("UPDATE ".TABLE_PREFIX."residence SET accepted = 1");
+            $db->query("UPDATE " . TABLE_PREFIX . "residence SET accepted = 1");
             redirect("modcp.php?action=residences");
         }
 
         //wohnort ablehnen
         //wohnort ablehnen
-        if(isset($_POST['refuse_home'])) {
+        if (isset($_POST['refuse_home'])) {
 
             $refuse_home = $_POST['res_id'];
             $refuse_reason = $_POST['refuse_reason'];
 
             $home_owner = $db->query("SELECT *
-            from ".TABLE_PREFIX."residence
-           WHERE res_id = '".$refuse_home."'
-          
+            from " . TABLE_PREFIX . "residence
+           WHERE res_id = '" . $refuse_home . "'
+
             ");
 
             $owner_uid = $db->fetch_array($home_owner);
@@ -1272,11 +1289,11 @@ function residences_modcp() {
                 "toid" => $uid
             );
             // $pmhandler->admin_override = true;
-            $pmhandler->set_data ($pm_change);
-            if (!$pmhandler->validate_pm ())
+            $pmhandler->set_data($pm_change);
+            if (!$pmhandler->validate_pm())
                 return false;
             else {
-                $pmhandler->insert_pm ();
+                $pmhandler->insert_pm();
             }
 
             $db->delete_query("residence", "res_id = '$refuse_home'");
@@ -1286,46 +1303,47 @@ function residences_modcp() {
 
         //Wohnung editieren
 
-        if(isset($_POST['editplace'])) {
+        if (isset($_POST['editplace'])) {
             $place_id = (int) $mybb->get_input('place_id');
             $country = $db->escape_string($mybb->get_input('country'));
             $place = $db->escape_string($mybb->get_input('place'));
 
 
-            $db->query("UPDATE ".TABLE_PREFIX."places SET country ='".$country."', place = '".$place."' WHERE place_id = '".$place_id."'");
+            $db->query("UPDATE " . TABLE_PREFIX . "places SET country ='" . $country . "', place = '" . $place . "' WHERE place_id = '" . $place_id . "'");
             redirect("modcp.php?action=residences");
         }
 
 
         $delete_place = $mybb->input['delete_place'];
 
-        if($delete_place){
+        if ($delete_place) {
             $db->delete_query("places", "place_id = '$delete_place'");
             redirect("modcp.php?action=residences");
         }
 
 
-        eval("\$page = \"".$templates->get("residences_modcp")."\";");
+        eval("\$page = \"" . $templates->get("residences_modcp") . "\";");
         output_page($page);
     }
 }
 
 $plugins->add_hook('global_intermediate', 'global_residence_alert');
 
-function global_residence_alert(){
+function global_residence_alert()
+{
     global $db, $mybb, $residence_alert_place, $residence_alert_home, $lang;
     //Die Sprachdatei
     $lang->load('residences');
 
     $select = $db->query("SELECT *
-        FROM ".TABLE_PREFIX."places
+        FROM " . TABLE_PREFIX . "places
         where accepted = 0
         ");
 
-    $count = mysqli_num_rows ($select);
+    $count = mysqli_num_rows($select);
 
-    if($count > 0){
-        if($mybb->usergroup['canmodcp'] == 1){
+    if ($count > 0) {
+        if ($mybb->usergroup['canmodcp'] == 1) {
             $residence_alert_place = "<div class=\"red_alert\"><a href='modcp.php?action=residences'>Aktuell sind {$count} offene Orte vorhanden. </a>
 </div>";
         }
@@ -1333,14 +1351,14 @@ function global_residence_alert(){
 
 
     $select2 = $db->query("SELECT *
-        FROM ".TABLE_PREFIX."residence
+        FROM " . TABLE_PREFIX . "residence
         where accepted = 0
         ");
 
-    $count = mysqli_num_rows ($select2);
+    $count = mysqli_num_rows($select2);
 
-    if($count > 0){
-        if($mybb->usergroup['canmodcp'] == 1){
+    if ($count > 0) {
+        if ($mybb->usergroup['canmodcp'] == 1) {
             $residence_alert_home = "<div class=\"red_alert\"><a href='modcp.php?action=residences'>Aktuell sind {$count} offene Wohnorte vorhanden. </a>
 </div>";
         }
@@ -1353,21 +1371,22 @@ function global_residence_alert(){
 $plugins->add_hook('fetch_wol_activity_end', 'residences_user_activity');
 $plugins->add_hook('build_friendly_wol_location_end', 'residences_location_activity');
 
-function residences_user_activity($user_activity){
+function residences_user_activity($user_activity)
+{
     global $user;
 
-    if(my_strpos($user['location'], "misc.php?action=residences") !== false) {
+    if (my_strpos($user['location'], "misc.php?action=residences") !== false) {
         $user_activity['activity'] = "residences";
     }
 
     return $user_activity;
 }
 
-function residences_location_activity($plugin_array) {
+function residences_location_activity($plugin_array)
+{
     global $db, $mybb, $lang;
 
-    if($plugin_array['user_activity']['activity'] == "residences")
-    {
+    if ($plugin_array['user_activity']['activity'] == "residences") {
         $plugin_array['location_name'] = "<b><a href='misc.php?action=residences'>Wer wohnt wo?</a></b>";
     }
 
